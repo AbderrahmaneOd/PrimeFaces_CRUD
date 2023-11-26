@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Login Page</title>
+        <style>
+            /* Styles for centering the card */
+            .centered-card {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </h:head>
+    <h:body>
+
+        <div style="position: relative; height: 100vh;">
+            <!-- Wrapping div with height 100vh to center content vertically -->
+
+            <div class="centered-card">
+
+                <p:card style="width: 30rem; margin-bottom: 2em; border: 1px solid #000000">
+
+                    <f:facet name="title">
+                        Login
+                    </f:facet>
+                    
+                    <h:form id="loginForm">
+                        <p:panelGrid columns="2" layout="grid">
+                            <h:outputLabel for="username" value="Username" />
+                            <p:inputText id="username" value="#{loginBean.username}" />
+
+                            <h:outputLabel for="password" value="Password" />
+                            <p:password id="password" value="#{loginBean.password}" />
+                        </p:panelGrid>
+                        <p:commandButton value="Login" ajax="false"/>
+                    </h:form>
+                    
+                </p:card>
+
+            </div>
+        </div>
+
+
+
+    </h:body>
+</html>

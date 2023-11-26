@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="title">Employee Page</ui:define>
+
+
+    <ui:define name="header"></ui:define>
+
+    <ui:define name="content">
+
+        <div style="display: flex; padding: 20px;  justify-content: center;  align-items: center; border: 1px solid #ccc;">
+
+            <div style="width: 800px;">
+                <h:form id="f1">
+                    <p:panel header="Ajouter un service">
+                        <p:panelGrid columns="2" layout="grid" id="p1">
+
+                            <p:outputLabel  for="nom" value="Nom"/>
+                            <p:inputText id="nom" value="#{serviceBean.service.nom}"/>
+
+                            <p:commandButton value="Ajouter" actionListener="#{serviceBean.onCreateAction()}" update="f1:p1"/>
+
+                        </p:panelGrid>
+
+                    </p:panel>
+                </h:form>
+
+                <p:card style="margin-top: 2em; border: 2px solid #ccc;">
+                    <h:form id="form">
+
+
+                        <p:dataTable var="service" value="#{serviceBean.services}" rows="10"
+                                     paginator="true" paginatorPosition="both"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,{ShowAll|'All'}"
+                                     editable="true"
+                                     id="services"
+                                     selection="#{serviceBean.service}" selectionMode="single"
+                                     rowKey="#{service.id}">
+
+                            <p:ajax event="rowEdit" listener="#{serviceBean.onEdit}"/>
+                            <p:ajax event="rowEditCancel" listener="#{serviceBean.onCancel}"/>
+
+                            <p:column headerText="Name">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{service.nom}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{service.nom}" style="width:100%" label="Name"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width:6rem">
+                                <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
+                            </p:column>
+
+
+                            <f:facet name="paginatorTopLeft">
+                                <p:commandButton update="services" icon="pi pi-refresh"/>
+                            </f:facet>
+
+
+
+                        </p:dataTable>
+
+                        <p:contextMenu for="services">
+
+                            <p:menuitem value="Delete" update="services" icon="pi pi-times"
+                                        action="#{serviceBean.onDeleteAction()}"/>
+                        </p:contextMenu>
+
+
+                    </h:form>
+                </p:card>
+
+            </div>
+
+
+        </div>
+
+    </ui:define>
+
+    <ui:define name="footer">
+
+    </ui:define>
+
+
+
+</ui:composition>

@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="title">Home Page</ui:define>
+
+    <ui:define name="header"></ui:define>
+
+    <ui:define name="content">
+
+        <div style="display: flex; padding: 20px;  justify-content: center;  align-items: center; border: 1px solid #ccc;">
+            <div style="width: 950px;">
+                <h:form id="f1">
+                    <div class="card">
+                        <p:panel header="Ajouter un employe">
+                            <p:panelGrid columns="2" layout="grid" id="p1">
+                                <p:outputLabel value="Nom"/>
+                                <p:inputText value="#{employeBean.employe.nom}"/>
+
+                                <p:outputLabel value="Prenom"/>
+                                <p:inputText value="#{employeBean.employe.prenom}"/>
+
+                                <p:outputLabel value="Date de Naissance"/>
+                                <p:calendar value="#{employeBean.employe.dateNaissance}" pattern="yyyy-MM-dd"/>
+
+                                <p:outputLabel for="@next" value="Service"/>
+                                <p:selectOneMenu  value="#{employeBean.employe.service.id}">
+                                    <p:ajax update="@this" process="@this"/>
+                                    <f:selectItem itemLabel="Select service" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{serviceBean.services}" var="service"
+                                                   itemLabel="#{service.nom}" itemValue="#{service.id}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="@next" value="Manager"/>
+                                <p:selectOneMenu value="#{employeBean.manager.id}">
+                                    <p:ajax update="@this" process="@this"/>
+                                    <f:selectItem itemLabel="Select manager" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{employeBean.employes}" var="employe"
+                                                   itemLabel="#{employe.nom} #{employe.prenom}" itemValue="#{employe.id}"/>
+                                </p:selectOneMenu>
+
+
+                                <p:commandButton value="Ajouter" actionListener="#{employeBean.onCreateAction()}" update="f1:p1"/>
+                            </p:panelGrid>
+                        </p:panel>
+
+                    </div>
+                </h:form>
+
+                <p:card style="margin-top: 2em; border: 2px solid #ccc;">
+                    <h:form id="form">
+
+
+                        <p:dataTable var="employe" value="#{employeBean.employes}" rows="10"
+                                     paginator="true" paginatorPosition="both"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                     rowsPerPageTemplate="5,10,{ShowAll|'All'}"
+                                     editable="true"
+                                     id="employes"
+                                     selection="#{employeBean.employe}" selectionMode="single"
+                                     rowKey="#{employe.id}">
+
+                            <p:ajax event="rowEdit" listener="#{employeBean.onEdit}"/>
+                            <p:ajax event="rowEditCancel" listener="#{employeBean.onCancel}"/>
+
+                            <p:column headerText="Nom">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{employe.nom}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{employe.nom}" style="width:100%" label="Name"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Prenom">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{employe.prenom}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{employe.prenom}" style="width:100%" label="Name"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Date Naissance">
+                                <p:cellEditor>
+                                    <f:facet name="output" >
+                                        <p:calendar value="#{employe.dateNaissance}" pattern="yyyy-MM-dd" readonly="true"/>
+                                    </f:facet>
+                                    <f:facet name="input" >
+                                        <p:calendar value="#{employe.dateNaissance}" pattern="yyyy-MM-dd"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <!-- <p:column headerText="Photo" style="width: 15%">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:graphicImage value="#{employe.photo}" width="100" height="50"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:graphicImage value="#{employe.photo}" width="100" height="50"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column> -->
+
+                            <p:column headerText="Service">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{employe.service.nom}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{employe.service.id}">
+                                            <f:selectItems value="#{serviceBean.services}" var="s"
+                                                           itemLabel="#{s.nom}" itemValue="#{s.id}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Manager">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{employe.manager.nom} #{employe.manager.prenom}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{employe.service.id}">
+                                            <f:selectItems value="#{employeBean.employes}" var="s"
+                                                           itemLabel="#{s.nom} #{s.prenom}" itemValue="#{s.id}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column style="width:6rem">
+                                <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
+                            </p:column>
+
+
+                            <f:facet name="paginatorTopLeft">
+                                <p:commandButton update="employes" icon="pi pi-refresh"/>
+                            </f:facet>
+
+
+
+                        </p:dataTable>
+
+                        <p:contextMenu for="employes">
+
+                            <p:menuitem value="Delete" update="employes" icon="pi pi-times"
+                                        action="#{employeBean.onDeleteAction()}"/>
+                        </p:contextMenu>
+
+
+                    </h:form>
+                </p:card>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="footer">
+
+    </ui:define>
+
+
+
+</ui:composition>
