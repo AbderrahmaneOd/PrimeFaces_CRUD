@@ -29,6 +29,9 @@ public class Employe {
     
     private String photo;
     
+    private String username;
+    private String password;
+    
     @ManyToOne
     private Service service;
 
@@ -59,6 +62,15 @@ public class Employe {
         this.service = service;
         this.manager = manager;
         this.employeesManaged = employeesManaged;
+    }
+
+    public Employe(String nom, String prenom, Date dateNaissance, String photo, String username, String password) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.photo = photo;
+        this.username = username;
+        this.password = password;
     }
     
     
@@ -118,6 +130,32 @@ public class Employe {
     public void setManager(Employe manager) {
         this.manager = manager;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Employe> getEmployeesManaged() {
+        return employeesManaged;
+    }
+
+    public void setEmployeesManaged(List<Employe> employeesManaged) {
+        this.employeesManaged = employeesManaged;
+    }
+    
+    
 
     public List<Employe> getManagedEmployees() {
         return employeesManaged;

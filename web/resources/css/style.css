@@ -1,0 +1,22 @@
+.content {
+    display: flex;
+    padding: 20px;
+}
+
+
+.body {
+    display: flex;
+    padding: 20px; 
+    justify-content: center; 
+    align-items: center;
+    border: 1px solid #ccc;
+}
+
+
+/* Styles for centering the card */
+.centered-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
